@@ -1,11 +1,13 @@
 import type { User, UserToLogin, UserToRegister } from '@/types/models'
-// import { NotificationColor, notify } from '~/utils/notification'
 import { postRequest } from '@/utils/api'
 import { useRouter } from 'vue-router'
+
+
 
 export const useAuth = () => {
     const auth = useAuthStore()
     const router = useRouter()
+    const toast = useToast()
 
     //   login
     const login = async (userToLogin: UserToLogin) => {
@@ -30,9 +32,16 @@ export const useAuth = () => {
 
                 // 返回首页
                 console.log("登录成功");
-                
-                // router.push('/');
+                toast.add({
+                    title: "登录成功",
+                    description: "欢迎回来",
+                    icon: "i-fluent-checkmark-starburst-16-filled",
+                    color: "green",
+                    timeout: 1000,
+                })
+                router.push('/');
 
+                
             } else {
                 console.log(response.msg);
             }
@@ -51,6 +60,13 @@ export const useAuth = () => {
 
             // 注册成功
             console.log("注册成功");
+            toast.add({
+                title: "注册成功",
+                description: "欢迎使用Tika,请登录使用",
+                icon: "i-fluent-checkmark-starburst-16-filled",
+                color: "green",
+                timeout: 5000,
+            })
         } catch (error) {
             console.error(error);
         }

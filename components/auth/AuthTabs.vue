@@ -74,7 +74,6 @@
 </template>
 
 <script setup lang="ts">
-import { notify, NotificationColor } from '#imports';
 import { useAuth } from '@/composables/useAuth';
 import type { UserToLogin, UserToRegister } from '~/types/models';
 
@@ -103,7 +102,6 @@ const submitAuth = async (type: string) => {
   try {
     if (type === "login") { // 登录
       await login(loginForm)
-      notify("登录成功", "欢迎回来", 5000, NotificationColor.success);
     } else if (type === "register") { // 注册
       await register(registerForm)
     }

@@ -1,4 +1,4 @@
 <template>
-    <UNotifications />
+  <UNotifications pause-timeout-on-hover
+  ="false" />
 </template>
-

@@ -60,6 +60,8 @@ export const useAuth = () => {
                 color: "green",
                 timeout: 5000,
             })
+
+            return response;
         } catch (error) {
             console.error(error);
         }

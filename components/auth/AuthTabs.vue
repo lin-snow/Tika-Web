@@ -77,7 +77,7 @@
 import { useAuth } from '@/composables/useAuth';
 import type { UserToLogin, UserToRegister } from '~/types/models';
 
-const { login, register, logout } = useAuth();
+const { login, register } = useAuth();
 
 // 登录表单
 const loginForm = reactive<UserToLogin>({
@@ -97,13 +97,27 @@ const items = [
   { key: "register", label: "注册", description: "创建一个新账户" },
 ];
 
+// 清空表单
+const clearForm = (type: string) => {
+  if (type === "login") {
+    loginForm.username = "";
+    loginForm.password = "";
+  } else if (type === "register") {
+    registerForm.username = "";
+    registerForm.password = "";
+  }
+};
+
 // 提交表单
 const submitAuth = async (type: string) => {
   try {
     if (type === "login") { // 登录
       await login(loginForm)
     } else if (type === "register") { // 注册
-      await register(registerForm)
+      const response = await register(registerForm)
+      if (response) {
+        clearForm("register");
+      }
     }
   } catch (error) {
     console.error(error);

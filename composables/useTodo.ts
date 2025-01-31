@@ -1,7 +1,9 @@
-import type { Todo, Category, User, Response, TodoPageQuery, TodoToAdd, TodoToUpdate } from "~/types/models"
+import type { Todo, Category, Response, TodoPageQuery, TodoToAdd, TodoToUpdate } from "~/types/models"
 import { getRequest, postRequest, putRequest } from "~/utils/api"
 
 export const useTodo = () => {
+    const toast = useToast();
+
     const fetchCategories = async () => {
         try {
             const response = await getRequest<Category[]>('todo/categories');
@@ -34,6 +36,13 @@ export const useTodo = () => {
             if (!response) {
                 throw new Error('Add todo request failed');
             }
+
+            toast.add({
+                title: "添加成功",
+                icon: "i-fluent-checkmark-starburst-16-regular",
+                color: "green",
+                timeout: 1000,
+            })
 
             return response;
         } catch (error) {

@@ -1,4 +1,4 @@
-import type { Response, TodoPageQuery } from "~/types/models";
+import type { Response } from "~/types/models";
 
 export const postRequest = async <T>(url: string, body: object) => {
     const BASE_API = useRuntimeConfig().public.baseApi;
@@ -89,6 +89,38 @@ export const putRequest = async <T>(url: string, body: object) => {
                 'token': useAuthStore().getToken() || ''
             },
             body: JSON.stringify(body)
+        })
+
+        if (response.code !== 1) {
+            console.log(response.msg);
+            toast.add({
+                title: "请求失败",
+                description: response.msg,
+                icon: "i-fluent-error-circle-16-filled",
+                color: "red",
+                timeout: 2000,
+            })
+            return null;
+        }
+
+        return response;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export const deleteRequest = async <T>(url: string, params?: any) => {
+    const BASE_API = useRuntimeConfig().public.baseApi;
+    const toast = useToast();
+
+    try {
+        // Params Query
+        const queryParamString: string = params ? "?" + Object.keys(params).map(key => key + "=" + params[key]).join("&") : "";
+        const response: Response<T> = await $fetch(`${BASE_API}/${url}${queryParamString}`, {
+            method: 'DELETE',
+            headers: {
+                'token': useAuthStore().getToken() || ''
+            }
         })
 
         if (response.code !== 1) {

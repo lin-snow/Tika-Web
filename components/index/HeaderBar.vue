@@ -11,22 +11,22 @@
           size="lg"
           src="https://avatars.githubusercontent.com/u/99076044?v=4"
           alt="Avatar"
-          class="shadow-md"
+          class="shadow-md mb-1"
         />
-        <UChip text="3" size="2xl">
-          <UButton icon="i-heroicons-inbox" color="gray" />
+        <UChip text="3" size="xl">
+          <UButton icon="i-heroicons-inbox" color="gray" size="sm" />
         </UChip>
-        <UChip text="1" size="2xl">
-          <UButton icon="i-heroicons-bell" color="gray" />
+        <UChip text="1" size="xl">
+          <UButton icon="i-heroicons-bell" color="gray" size="sm"/>
         </UChip>
       </div>
 
       <!-- Auth 跳转按钮 -->
       <UButton
-        color="green"
-        variant="soft"
-        size="xl"
-        icon="i-fluent-emoji-flat-robot"
+        color="gray"
+        variant="solid"
+        size="md"
+        icon="i-fluent-cloud-16-regular"
       >
         <NuxtLink to="/auth" class="flex items-center gap-2"> 登录 </NuxtLink>
       </UButton>

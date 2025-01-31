@@ -13,11 +13,12 @@
       <div>
         <UButton
           to="/"
-          variant="soft"
-          size="xl"
-          icon="i-fluent-emoji-flat-house"
+          variant="solid"
+          color="gray"
+          size="md"
+          icon="i-fluent-home-12-regular"
         >
-          返回首页
+          首页
         </UButton>
       </div>
     </div>

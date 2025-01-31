@@ -7,15 +7,28 @@
         <UIcon name="i-fluent-emoji-flat-clipboard" class="w-5 h-5 mt-1" />
         <h2 class="text-lg font-semibold mb-2">待办清单</h2>
       </div>
-      <div>
-        <UButton
-          color="gray"
-          @click="todo.fetchTodosData"
-          size="sm"
-          class="mr-3"
-        >
-          <UIcon name="i-fluent-arrow-sync-12-filled" class="w-4 h-4" />
-        </UButton>
+      <div class="flex justify-end items-center">
+        <!-- 刷新任务列表 -->
+        <div>
+          <UButton
+            color="gray"
+            @click="todo.fetchTodosData"
+            class="mr-2 w-9 h-7"
+            :loading="todo.isLoading"
+          >
+            <UIcon v-if="!todo.isLoading" name="i-fluent-arrow-sync-12-filled" class="w-4 h-4" />
+          </UButton>
+        </div>
+        <!-- 切换删除模式 -->
+        <div>
+          <UButton
+            :color="deleteMode ? 'red' : 'gray'"
+            @click="changeDeleteMode"
+            size="sm"
+          >
+            <UIcon name="i-fluent-delete-12-regular" class="w-4 h-4" />
+          </UButton>
+        </div>
       </div>
     </div>
     <div v-if="todo.todos.length === 0" class="text-center text-gray-500">
@@ -27,13 +40,13 @@
       <div
         v-for="todo in todo.todos"
         :key="todo.todoId"
-        class="flex justify-between items-center p-3 gap-2 border-b"
+        class="flex justify-between items-center py-2 gap-2 border-b w-full"
       >
         <!-- 点击打开详情 -->
         <UButton
           color="white"
           class="text-left w-auto"
-          trailing-icon="i-heroicons-chevron-down-20-solid"
+          trailing-icon="i-fluent-chevron-up-down-20-filled"
           @click="openModal(todo)"
         >
           <span class="truncate w-48 inline-block align-middle" :title="todo.title">
@@ -42,9 +55,17 @@
         </UButton>
 
         <!-- Done 按钮 -->
-        <UButton color="gray" variant="solid" @click="markAsDone(todo)">
-          <UIcon name="i-fluent-checkmark-12-filled" class="w-4 h-4" />
-        </UButton>
+        <div v-if="!deleteMode">
+          <UButton color="gray" variant="solid" @click="markAsDone(todo)">
+            <UIcon name="i-fluent-checkmark-12-filled"/>
+          </UButton>
+        </div>
+        <!-- 删除按钮 -->
+        <div v-else>
+          <UButton color="red"  variant="soft" @click="deleteTodoData(todo)" >
+              <UIcon name="i-fluent-delete-32-regular" />
+          </UButton>
+        </div>
       </div>
 
         <!-- 任务详情 Modal -->
@@ -75,19 +96,13 @@
           </UCard>
         </UModal>
 
-      
-        <!-- <UButton color="gray" variant="solid">
-          <UIcon name="i-fluent-checkmark-12-filled" class="w-4 h-4" />
-        </UButton> -->
-
       <!-- 分页控件 -->
       <div class="flex justify-center">
         <UPagination
           v-model="todo.currentPage"
           :page-count="todo.pageSize"
           :total="todo.total"
-          :active-button="{ variant: 'outline' }"
-          :inactive-button="{ color: 'gray' }"
+          :active-button="{ variant: 'solid', color: 'black' }"
           @update:model-value="todo.fetchTodosData"
           class="mx-auto mt-4"
         />
@@ -103,7 +118,7 @@ import { ref } from "vue";
 import type { Todo, TodoToUpdate } from "~/types/models";
 
 const todo = useTodoStore();
-const { updateTodo } = useTodo();
+const { updateTodo, deleteTodo } = useTodo();
 
 const isModalOpen = ref(false);
 const selectedTodo = ref<Todo | null>(null);
@@ -118,6 +133,19 @@ onMounted(() => {
   todo.fetchTodosData();
 });
 
+const deleteMode = ref(false);
+const changeDeleteMode = () => {
+  deleteMode.value = !deleteMode.value;
+  const toast = useToast();
+  toast.add({
+    title: "删除模式",
+    icon: "i-fluent-delete-12-regular",
+    color: deleteMode.value ? "red" : "gray",
+    description: deleteMode.value ? "已开启" : "已关闭",
+    timeout: 1000,
+  });
+};
+
 // 标记为已完成
 const markAsDone = async (todoAsDone: Todo) => {
   // console.log("markAsDone", id);
@@ -128,6 +156,12 @@ const markAsDone = async (todoAsDone: Todo) => {
     status: 0,
   }
   await updateTodo(todoToUpdate);
+  todo.fetchTodosData();
+};
+
+// 删除任务
+const deleteTodoData = async (todoToDel: Todo) => {
+  await deleteTodo(todoToDel.todoId);
   todo.fetchTodosData();
 };
 </script>

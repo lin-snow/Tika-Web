@@ -16,6 +16,7 @@
                 v-model="loginForm.username"
                 type="text"
                 placeholder="输入用户名"
+                color="gray"
               />
             </UFormGroup>
             <UFormGroup label="密码" required>
@@ -23,15 +24,17 @@
                 v-model="loginForm.password"
                 type="password"
                 placeholder="输入密码"
+                color="gray"
               />
             </UFormGroup>
 
             <div class="flex justify-center">
               <UButton
                 type="submit"
-                variant="soft"
-                icon="i-fluent-emoji-flat-cup-with-straw"
-                class="w-36 flex justify-center items-center"
+                variant="solid"
+                color="gray"
+                icon="i-fluent-drink-coffee-16-regular"
+                class="w-28 flex justify-center items-center"
               >
                 登录
               </UButton>
@@ -45,6 +48,7 @@
                 v-model="registerForm.username"
                 type="text"
                 placeholder="输入用户名"
+                color="gray"
               />
             </UFormGroup>
             <UFormGroup label="密码" required>
@@ -52,15 +56,17 @@
                 v-model="registerForm.password"
                 type="password"
                 placeholder="输入密码"
+                color="gray"
               />
             </UFormGroup>
 
             <div class="flex justify-center">
               <UButton
                 type="submit"
-                variant="soft"
-                class="w-36 flex justify-center items-center"
-                icon="i-fluent-emoji-flat-fish-cake-with-swirl"
+                variant="solid"
+                color="gray"
+                class="w-28 flex justify-center items-center"
+                icon="i-fluent-person-add-20-regular"
               >
                 注册
               </UButton>

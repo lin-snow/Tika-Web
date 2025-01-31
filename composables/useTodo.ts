@@ -1,5 +1,5 @@
 import type { Todo, Category, Response, TodoPageQuery, TodoToAdd, TodoToUpdate } from "~/types/models"
-import { getRequest, postRequest, putRequest } from "~/utils/api"
+import { getRequest, postRequest, putRequest, deleteRequest } from "~/utils/api"
 
 export const useTodo = () => {
     const toast = useToast();
@@ -63,5 +63,26 @@ export const useTodo = () => {
         }
     }
 
-    return { fetchTodos, fetchCategories, addTodo, updateTodo }
+    const deleteTodo = async (id: number) => {
+        try {
+
+            const response = await deleteRequest<Response<any>>(`todo/deleteTodo/${id}`);
+            if (!response) {
+                throw new Error('Delete todo request failed');
+            }
+
+            toast.add({
+                title: "删除成功",
+                icon: "i-fluent-checkmark-starburst-16-regular",
+                color: "green",
+                timeout: 1000,
+            })
+
+            return response;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    return { fetchTodos, fetchCategories, addTodo, updateTodo, deleteTodo }
 }

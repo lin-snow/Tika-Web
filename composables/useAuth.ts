@@ -17,34 +17,27 @@ export const useAuth = () => {
                 throw new Error('Login request failed');
             }
 
-            // 返回1表示登录成功
-            if (response.code === 1) {
-                // 解构赋值得到id, username, token
-                const { id, username, token } = response.data;
-                const user: User = {
-                    id: id,
-                    username: username,
-                    token: token
-                }
-
-                // 保存数据到状态管理
-                auth.setUser(user);
-
-                // 返回首页
-                console.log("登录成功");
-                toast.add({
-                    title: "登录成功",
-                    description: "欢迎回来",
-                    icon: "i-fluent-checkmark-starburst-16-filled",
-                    color: "green",
-                    timeout: 1000,
-                })
-                router.push('/');
-
-                
-            } else {
-                console.log(response.msg);
+            // 解构赋值得到id, username, token
+            const { id, username, token } = response.data;
+            const user: User = {
+                id: id,
+                username: username,
+                token: token
             }
+
+            // 保存数据到状态管理
+            auth.setUser(user);
+
+            // 返回首页
+            console.log("登录成功");
+            toast.add({
+                title: "登录成功",
+                description: "欢迎回来",
+                icon: "i-fluent-checkmark-starburst-16-filled",
+                color: "green",
+                timeout: 1000,
+            })
+            router.push('/');
         } catch (error) {
             console.error(error);
         }

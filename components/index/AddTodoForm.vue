@@ -22,7 +22,7 @@
       size="sm"
       color="white"
       placeholder="输入任务内容..."
-      rows="4"
+      :rows="3"
       class="mb-4"
     />
 
@@ -35,10 +35,12 @@
           v-if="item.key === 'category'"
           class="flex justify-between items-center gap-2 p-2"
         >
-          <span class="text-md text-gray-600">选择分类：</span>
+          <span class="text-md text-gray-600">选择分类 ：</span>
           <USelectMenu
-            v-model="selectedCategory"
+            v-model="selected"
             :options="categories"
+            value-attribute="categoryId"
+            option-attribute="categoryName"
             class="w-32"
           />
         </div>
@@ -48,13 +50,13 @@
           v-else-if="item.key === 'dueDate'"
           class="flex justify-between items-center gap-2 p-2"
         >
-          <span class="text-md text-gray-600">选择日期：</span>
+          <span class="text-md text-gray-600">截止日期 (默认无) ： </span>
 
           <UPopover :popper="{ placement: 'bottom-start' }">
             <UButton
               icon="i-heroicons-calendar-days-20-solid"
               variant="outline"
-              :label="format(date, 'd MMM, yyy')"
+              
             />
 
             <template #panel="{ close }">
@@ -83,7 +85,7 @@
             variant="soft"
             size="md"
             icon="i-fluent-emoji-flat:writing-hand-medium-light"
-            @click="addTask"
+            @click="addTodoData"
           >
             添加任务
           </UButton>
@@ -93,11 +95,15 @@
   </UCard>
 </template>
 
-<script setup>
-import { ref } from "vue";
+<script setup lang="ts">
+import DatePicker from "./DatePicker.vue";
+import { ref, onMounted } from "vue";
 import { format } from "date-fns";
+import type { Category } from "~/types/models";
 
-const date = ref(new Date());
+const { fetchCategories, addTodo } = useTodo();
+
+const todoStore = useTodoStore();
 
 const items = [
   { key: "category", label: "分类", description: "选择任务所属分类" },
@@ -105,6 +111,59 @@ const items = [
   { key: "actions", label: "操作", description: "任务操作" },
 ];
 
-const categories = ["工作", "学习", "生活", "娱乐"]; // 示例分类
-const selectedCategory = ref(categories[0]); // 存储选中的分类
+// 表单数据
+const todoTitle = ref("");
+const todoContent = ref("");
+const selectedCategoryId = ref<number>();
+const date = ref<Date | null>(null);
+
+const categories = ref<Category[]>([]);
+const selected = ref<Category>();
+const fetchCategoriesData = async () => {
+  const response = await fetchCategories();
+  if (response?.data?.length) {
+    // console.log("response",response.data);
+    categories.value = response.data;
+    selected.value = response.data[0];
+    selectedCategoryId.value = selected.value?.categoryId;
+  }
+};
+
+const clearForm = () => {
+  todoTitle.value = "";
+  todoContent.value = "";
+  selectedCategoryId.value = selected.value?.categoryId;
+  date.value = new Date();
+};
+
+const formatDate = (date: Date) => {
+  return date.toISOString().split("T")[0]; // 只取 YYYY-MM-DD 部分
+};
+
+const addTodoData = async () => {
+  const todo = {
+    title: todoTitle.value,
+    content: todoContent.value,
+    categoryId: selectedCategoryId.value,
+    dueDate: date.value ? formatDate(date.value) : null,
+  };
+
+  const response = await addTodo(todo);
+  if (response) {
+    clearForm();
+    todoStore.currentPage = 1;
+    todoStore.fetchTodosData();
+  }
+};
+  
+
+onMounted(() => {
+  fetchCategoriesData();
+  // console.log("categories",categories.value);
+  if (categories.value.length) {
+    selected.value = categories.value[0];
+    selectedCategoryId.value = selected.value?.categoryId;
+  }
+});
+
 </script>

@@ -1,19 +1,25 @@
-// import { defineStore } from 'pinia'
-// import { createPinia, setActivePinia } from "pinia"
-// const pinia = createPinia()
-
-// export default { store: setActivePinia(pinia) }
 import type { User } from '@/types/models'
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 
 export const useAuthStore = defineStore('authStore', () => {
     const user = ref<User | null>(null)
 
-    // 确保只在客户端加载本地存储数据
-    onMounted(() => {
+    // 仅在客户端环境读取 localStorage
+    if (typeof window !== 'undefined') {
         const storedUser = localStorage.getItem("user")
         if (storedUser) {
             user.value = JSON.parse(storedUser)
+        }
+    }
+
+    // 监听 user 变化，自动存入 localStorage（仅在客户端执行）
+    watchEffect(() => {
+        if (typeof window !== 'undefined') {
+            if (user.value) {
+                localStorage.setItem("user", JSON.stringify(user.value))
+            } else {
+                localStorage.removeItem("user")
+            }
         }
     })
 
@@ -30,6 +36,8 @@ export const useAuthStore = defineStore('authStore', () => {
         user.value = null
         localStorage.removeItem("user")
     }
+
+    
 
     return { user, getUser, getToken, isAuthenticated, setUser, clearUser }
 })

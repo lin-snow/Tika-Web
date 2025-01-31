@@ -7,18 +7,19 @@ export interface User {
 
 // Todo
 export interface Todo {
-    id: number;
+    todoId: number;
     title: string;
     content: string;
     dueDate?: Date;
     status: number;
     categoryId: number;
+    categoryName: string;
 }
 
 // Categort
 export interface Category {
-    id: number;
-    name: string;
+    categoryId: number;
+    categoryName: string;
 }
 
 // UserToLogin
@@ -40,5 +41,29 @@ export interface Response<T> {
     data: T;
 }
 
+// TodoPageQuery
+export interface TodoPageQuery {
+    page: number;
+    pageSize: number;
+    status?: number;
+    categoryId?: number;
+}
 
+// TodoToAdd
+export interface TodoToAdd {
+    title: string;
+    content: string;
+    dueDate?: string | null;
+    categoryId?: number;
+}
+
+// TodoToUpdate
+export interface TodoToUpdate {
+    id: number;
+    title: string;
+    content: string;
+    dueDate?: string | null;
+    categoryId?: number;
+    status: number;
+}
 

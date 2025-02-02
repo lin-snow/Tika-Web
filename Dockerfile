@@ -2,6 +2,6 @@ FROM node:22
 
 WORKDIR /app
 
-COPY .output/server /app/server
+COPY .output /app/.output
 
-CMD ["node", "server/index.mjs"]
+CMD ["node", ".output/server/index.mjs"]

@@ -14,13 +14,12 @@
           class="shadow-md mb-1"
         /> -->
         <!-- <UChip text="3" size="xl"> -->
-          <UButton icon="i-heroicons-inbox" color="gray" size="sm" 
-          @Click="featureDeveloping" />
+          <UButton icon="i-heroicons-inbox" color="gray" size="sm" to="/user" />
         <!-- </UChip> -->
         <!-- <UChip text="1" size="xl"> -->
-          <UButton icon="i-heroicons-bell" color="gray" size="sm"
+          <!-- <UButton icon="i-heroicons-bell" color="gray" size="sm"
             @Click="featureDeveloping"
-          />
+          /> -->
         <!-- </UChip> -->
       </div>
 

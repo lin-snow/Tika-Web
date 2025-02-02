@@ -3,24 +3,7 @@
   <UCard class="mx-auto mt-4 max-w-sm">
     <div class="flex justify-between items-center">
       <div class="flex justify-start items-center gap-4">
-        <!-- 头像 -->
-        <!-- <UAvatar
-          chip-color="primary"
-          chip-text=""
-          chip-position="top-right"
-          size="lg"
-          src="https://avatars.githubusercontent.com/u/99076044?v=4"
-          alt="Avatar"
-          class="shadow-md mb-1"
-        /> -->
-        <!-- <UChip text="3" size="xl"> -->
           <UButton icon="i-heroicons-inbox" color="gray" size="sm" to="/user" />
-        <!-- </UChip> -->
-        <!-- <UChip text="1" size="xl"> -->
-          <!-- <UButton icon="i-heroicons-bell" color="gray" size="sm"
-            @Click="featureDeveloping"
-          /> -->
-        <!-- </UChip> -->
       </div>
 
       <!-- Auth 跳转按钮 -->
